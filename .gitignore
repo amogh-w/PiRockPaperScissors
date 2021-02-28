@@ -1,0 +1,8 @@
+.vscode
+notebooks/.ipynb_checkpoints
+notebooks/dataset/rps
+notebooks/dataset/rps-test-set
+notebooks/dataset/rps.zip
+notebooks/dataset/rps-test-set.zip
+notebooks/log_dir
+notebooks/models
