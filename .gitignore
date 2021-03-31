@@ -1,5 +1,7 @@
 .vscode
 .ipynb_checkpoints
+__pycache__
+node_modules
 notebooks/dataset
-notebooks/rps-cnn.h5
-notebooks/rps-cnn-weights.h5
+rps-cnn.h5
+rps-cnn-weights.h5
