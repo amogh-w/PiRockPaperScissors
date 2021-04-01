@@ -11,6 +11,8 @@ cv2.namedWindow("test")
 
 model = load_model("./rps-cnn.h5")
 
+names = ["paper", "rock", "scissor"]
+
 while True:
     ret, frame = cam.read()
     if not ret:
@@ -32,7 +34,7 @@ while True:
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
     input_arr = np.array([input_arr])
     predictions = model.predict(input_arr)
-    print(predictions)
+    print(names[np.argmax(predictions)])
     #  sleep(2)
 
 
