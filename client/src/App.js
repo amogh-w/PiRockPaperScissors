@@ -1,60 +1,46 @@
-import { useRef, useCallback, useState, useEffect } from "react";
-import { Container, Grid, Paper, Button, Typography } from "@material-ui/core";
-import Webcam from "react-webcam";
-
-const videoConstraints = {
-  width: 1280,
-  height: 720,
-  facingMode: "user",
-};
-
-const WebcamCapture = () => {
-  const webcamRef = useRef(null);
-  const [rpsImage, setRpsImage] = useState("");
-
-  useEffect(() => {
-    // return () => {
-    sendImage();
-    // };
-  }, [rpsImage]);
-
-  const sendImage = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ image: rpsImage }),
-    };
-    fetch("http://192.168.1.10:8000/predict", requestOptions)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-  };
-
-  const capture = useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setRpsImage(imageSrc);
-  }, [webcamRef]);
-
-  return (
-    <>
-      <Webcam
-        audio={true}
-        height={720}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        width={1280}
-        videoConstraints={videoConstraints}
-      />
-      <Button onClick={capture}>Start Timer</Button>
-    </>
-  );
-};
+import { useState } from "react";
+import { Container, CssBaseline } from "@material-ui/core";
+import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import orange from "@material-ui/core/colors/orange";
+import lightBlue from "@material-ui/core/colors/lightBlue";
+import deepPurple from "@material-ui/core/colors/deepPurple";
+import deepOrange from "@material-ui/core/colors/deepOrange";
+import RockPaperScissor from "./components/RockPaperScissor";
 
 const App = () => {
+  const [darkState, setDarkState] = useState(
+    window.localStorage.getItem("darkMode") === "true" ? true : false
+  );
+
+  const palletType = darkState ? "dark" : "light";
+  const mainPrimaryColor = darkState ? orange[500] : lightBlue[500];
+  const mainSecondaryColor = darkState ? deepOrange[900] : deepPurple[500];
+
+  const darkTheme = createMuiTheme({
+    palette: {
+      type: palletType,
+      primary: {
+        main: mainPrimaryColor,
+      },
+      secondary: {
+        main: mainSecondaryColor,
+      },
+    },
+  });
+
+  const handleThemeChange = () => {
+    const preference = darkState;
+    setDarkState(!darkState);
+    window.localStorage.setItem("darkMode", !preference);
+  };
+
   return (
-    <Container>
-      <Typography>Hello</Typography>
-      <WebcamCapture />
-    </Container>
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Container>
+        <RockPaperScissor />
+      </Container>
+    </ThemeProvider>
   );
 };
 

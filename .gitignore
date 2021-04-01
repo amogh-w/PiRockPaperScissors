@@ -3,5 +3,9 @@
 __pycache__
 node_modules
 notebooks/dataset
+notebooks/dataset2
+notebooks/dataset3
 rps-cnn.h5
 rps-cnn-weights.h5
+rps-cnn-best.h5
+rps-cnn-weights-best.h5
