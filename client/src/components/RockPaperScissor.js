@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import * as tf from "@tensorflow/tfjs";
-import { Paper, Typography, Button, Divider } from "@material-ui/core";
+import { Paper, Typography, Button, Divider, Grid } from "@material-ui/core";
 
 let model;
 let labels = [];
@@ -296,60 +296,139 @@ const RockPaperScissor = () => {
 
   return (
     <Paper style={{ padding: "20px", margin: "20px 0px" }}>
-      <Typography>Welcome to Rock Paper Scissors Game!</Typography>
-      <video ref={videoRef} />
-      <Divider />
-      <Button type="button" id="0" onClick={handleButton}>
-        Rock
-      </Button>
-      <Button type="button" id="1" onClick={handleButton}>
-        Paper
-      </Button>
-      <Button type="button" id="2" onClick={handleButton}>
-        Scissors
-      </Button>
-      <Button type="button" id="3" onClick={handleButton}>
-        Spock
-      </Button>
-      <Button type="button" id="4" onClick={handleButton}>
-        Lizard
-      </Button>
-      <Divider />
+      <div style={{ textAlign: "center" }}>
+        <Typography>Welcome to Rock Paper Scissors Game!</Typography>
+        <video ref={videoRef} />
+        <br />
+        <Button
+          type="button"
+          id="0"
+          onClick={handleButton}
+          variant="outlined"
+          color="primary"
+        >
+          Rock
+        </Button>
+        <Button
+          type="button"
+          id="1"
+          onClick={handleButton}
+          variant="outlined"
+          color="primary"
+        >
+          Paper
+        </Button>
+        <Button
+          type="button"
+          id="2"
+          onClick={handleButton}
+          variant="outlined"
+          color="primary"
+        >
+          Scissors
+        </Button>
+        <Button
+          type="button"
+          id="3"
+          onClick={handleButton}
+          variant="outlined"
+          color="primary"
+        >
+          Spock
+        </Button>
+        <Button
+          type="button"
+          id="4"
+          onClick={handleButton}
+          variant="outlined"
+          color="primary"
+        >
+          Lizard
+        </Button>
+      </div>
+
       <Typography>Rock Samples = {rockSamples}</Typography>
       <Typography>Paper Samples = {paperSamples}</Typography>
       <Typography>Scissors Samples = {scissorsSamples}</Typography>
       <Typography>Spock Samples = {spockSamples}</Typography>
       <Typography>Lizard Samples = {lizardSamples}</Typography>
-      <Divider />
-      <Button
-        type="button"
-        onClick={() => {
-          train();
-        }}
-      >
-        Train
-      </Button>
 
-      <Button type="button" id="startPredicting" onClick={startPredicting}>
-        Start Predicting
-      </Button>
-      <Button type="button" id="stopPredicting" onClick={stopPredicting}>
-        Stop Predicting
-      </Button>
-      <Button type="button" id="saveModel" onClick={saveModel}>
-        Download Model
-      </Button>
-      {isPredicting ? (
-        <Typography>Prediction: {finalPredictionText}</Typography>
-      ) : (
-        <Typography>Please click the "Start Predicting" button.</Typography>
-      )}
+      <div style={{ textAlign: "center" }}>
+        <Button
+          type="button"
+          onClick={() => {
+            train();
+          }}
+          variant="outlined"
+          color="secondary"
+        >
+          Train
+        </Button>
+
+        <Button
+          type="button"
+          id="startPredicting"
+          onClick={startPredicting}
+          variant="outlined"
+          color="secondary"
+        >
+          Start Predicting
+        </Button>
+        <Button
+          type="button"
+          id="stopPredicting"
+          onClick={stopPredicting}
+          variant="outlined"
+          color="secondary"
+        >
+          Stop Predicting
+        </Button>
+        <Button
+          type="button"
+          id="saveModel"
+          onClick={saveModel}
+          variant="outlined"
+          color="secondary"
+        >
+          Download Model
+        </Button>
+        {isPredicting ? (
+          <Typography>Prediction: {finalPredictionText}</Typography>
+        ) : (
+          <Typography>Please click the "Start Predicting" button.</Typography>
+        )}
+      </div>
       <Divider />
       <Typography>Arena</Typography>
-      <Typography>Your Score: {playerScore}</Typography>
-      <Typography>CPU Score: {cpuScore}</Typography>
-
       <Button onClick={takeImage}>Take Image</Button>
+
+      <Grid container spacing={2}>
+        <Grid item xs={5}>
+          <Grid container justify="center">
+            <Grid item>
+              <Paper style={{ padding: "20px", margin: "20px" }}>
+                <Typography>Your Score: {playerScore}</Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={2}>
+          <Grid container justify="center">
+            <Grid item>
+              <Typography>FIGHT!</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={5}>
+          <Grid container justify="center">
+            <Grid item>
+              <Paper style={{ padding: "20px", margin: "20px" }}>
+                <Typography>CPU Score: {cpuScore}</Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     </Paper>
   );
 };
