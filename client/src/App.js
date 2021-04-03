@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Container, CssBaseline } from "@material-ui/core";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-mui";
 import orange from "@material-ui/core/colors/orange";
 import lightBlue from "@material-ui/core/colors/lightBlue";
 import deepPurple from "@material-ui/core/colors/deepPurple";
@@ -36,10 +38,12 @@ const App = () => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
-      <Container>
-        <RockPaperScissor />
-      </Container>
+      <AlertProvider template={AlertTemplate}>
+        <CssBaseline />
+        <Container>
+          <RockPaperScissor />
+        </Container>
+      </AlertProvider>
     </ThemeProvider>
   );
 };

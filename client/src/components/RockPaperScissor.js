@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import * as tf from "@tensorflow/tfjs";
 import { Paper, Typography, Button, Divider, Grid } from "@material-ui/core";
+import { useAlert } from "react-alert";
 
 let model;
 let labels = [];
@@ -28,6 +29,7 @@ const RockPaperScissor = () => {
   }, [videoRef]);
 
   const [mobileNet, setMobileNet] = useState();
+  const alert = useAlert();
 
   useEffect(() => {
     const loadMobileNet = async () => {
@@ -256,180 +258,208 @@ const RockPaperScissor = () => {
     let cpuLabels = ["Rock", "Paper", "Scissors", "Spock", "Lizard"];
     let cpuSelectedLabel = cpuLabels[Math.floor(Math.random() * 3)];
 
-    console.log(predictionText, cpuSelectedLabel);
+    let roundStatus;
 
     if (predictionText === "Rock") {
       if (cpuSelectedLabel === "Rock") {
-        console.log("Tie");
+        roundStatus = "Tie";
       } else if (cpuSelectedLabel === "Paper") {
-        console.log("Lost");
+        roundStatus = "Lost";
         setCpuScore(cpuScore + 1);
       } else if (cpuSelectedLabel === "Scissors") {
-        console.log("Won");
+        roundStatus = "Won";
         setPlayerScore(playerScore + 1);
       }
     } else if ((predictionText = "Paper")) {
       if (cpuSelectedLabel === "Rock") {
-        console.log("Won");
+        roundStatus = "Won";
         setPlayerScore(playerScore + 1);
       } else if (cpuSelectedLabel === "Paper") {
-        console.log("Tie");
+        roundStatus = "Tie";
       } else if (cpuSelectedLabel === "Scissors") {
-        console.log("Lost");
+        roundStatus = "Lost";
         setCpuScore(cpuScore + 1);
       }
     } else if ((predictionText = "Scissors")) {
       if (cpuSelectedLabel === "Rock") {
-        console.log("Lost");
+        roundStatus = "Lost";
         setCpuScore(cpuScore + 1);
       } else if (cpuSelectedLabel === "Paper") {
-        console.log("Won");
+        roundStatus = "Won";
         setPlayerScore(playerScore + 1);
       } else if (cpuSelectedLabel === "Scissors") {
-        console.log("Tie");
+        roundStatus = "Tie";
       }
     }
+
+    alert.show(`You: ${predictionText}, CPU: ${cpuSelectedLabel}`, {
+      title: `Result: ${roundStatus}`,
+    });
 
     predictedClass.dispose();
     await tf.nextFrame();
   };
 
   return (
-    <Paper style={{ padding: "20px", margin: "20px 0px" }}>
-      <div style={{ textAlign: "center" }}>
-        <Typography>Welcome to Rock Paper Scissors Game!</Typography>
-        <video ref={videoRef} />
-        <br />
-        <Button
-          type="button"
-          id="0"
-          onClick={handleButton}
-          variant="outlined"
-          color="primary"
-        >
-          Rock
-        </Button>
-        <Button
-          type="button"
-          id="1"
-          onClick={handleButton}
-          variant="outlined"
-          color="primary"
-        >
-          Paper
-        </Button>
-        <Button
-          type="button"
-          id="2"
-          onClick={handleButton}
-          variant="outlined"
-          color="primary"
-        >
-          Scissors
-        </Button>
-        <Button
-          type="button"
-          id="3"
-          onClick={handleButton}
-          variant="outlined"
-          color="primary"
-        >
-          Spock
-        </Button>
-        <Button
-          type="button"
-          id="4"
-          onClick={handleButton}
-          variant="outlined"
-          color="primary"
-        >
-          Lizard
-        </Button>
-      </div>
+    <>
+      <Paper style={{ padding: "20px", margin: "20px 0px" }}>
+        <div style={{ textAlign: "center" }}>
+          <Typography variant="h4">
+            Welcome to Rock Paper Scissors Game!
+          </Typography>
+          <Divider style={{ margin: "10px" }} />
+          <video ref={videoRef} />
+          <br />
+          <Button
+            type="button"
+            id="0"
+            onClick={handleButton}
+            variant="outlined"
+            color="primary"
+            style={{ margin: "20px" }}
+          >
+            Rock
+          </Button>
+          <Button
+            type="button"
+            id="1"
+            onClick={handleButton}
+            variant="outlined"
+            color="primary"
+            style={{ margin: "10px" }}
+          >
+            Paper
+          </Button>
+          <Button
+            type="button"
+            id="2"
+            onClick={handleButton}
+            variant="outlined"
+            color="primary"
+            style={{ margin: "10px" }}
+          >
+            Scissors
+          </Button>
+          <Button
+            type="button"
+            id="3"
+            onClick={handleButton}
+            variant="outlined"
+            color="primary"
+            style={{ margin: "10px" }}
+          >
+            Spock
+          </Button>
+          <Button
+            type="button"
+            id="4"
+            onClick={handleButton}
+            variant="outlined"
+            color="primary"
+            style={{ margin: "10px" }}
+          >
+            Lizard
+          </Button>
+        </div>
 
-      <Typography>Rock Samples = {rockSamples}</Typography>
-      <Typography>Paper Samples = {paperSamples}</Typography>
-      <Typography>Scissors Samples = {scissorsSamples}</Typography>
-      <Typography>Spock Samples = {spockSamples}</Typography>
-      <Typography>Lizard Samples = {lizardSamples}</Typography>
+        <Typography>Rock Samples = {rockSamples}</Typography>
+        <Typography>Paper Samples = {paperSamples}</Typography>
+        <Typography>Scissors Samples = {scissorsSamples}</Typography>
+        <Typography>Spock Samples = {spockSamples}</Typography>
+        <Typography>Lizard Samples = {lizardSamples}</Typography>
 
-      <div style={{ textAlign: "center" }}>
-        <Button
-          type="button"
-          onClick={() => {
-            train();
-          }}
-          variant="outlined"
-          color="secondary"
-        >
-          Train
-        </Button>
+        <div style={{ textAlign: "center" }}>
+          <Button
+            type="button"
+            onClick={() => {
+              train();
+            }}
+            variant="outlined"
+            color="secondary"
+            style={{ margin: "10px" }}
+          >
+            Train
+          </Button>
 
-        <Button
-          type="button"
-          id="startPredicting"
-          onClick={startPredicting}
-          variant="outlined"
-          color="secondary"
-        >
-          Start Predicting
-        </Button>
-        <Button
-          type="button"
-          id="stopPredicting"
-          onClick={stopPredicting}
-          variant="outlined"
-          color="secondary"
-        >
-          Stop Predicting
-        </Button>
-        <Button
-          type="button"
-          id="saveModel"
-          onClick={saveModel}
-          variant="outlined"
-          color="secondary"
-        >
-          Download Model
-        </Button>
-        {isPredicting ? (
-          <Typography>Prediction: {finalPredictionText}</Typography>
-        ) : (
-          <Typography>Please click the "Start Predicting" button.</Typography>
-        )}
-      </div>
-      <Divider />
-      <Typography>Arena</Typography>
-      <Button onClick={takeImage}>Take Image</Button>
+          <Button
+            type="button"
+            id="startPredicting"
+            onClick={startPredicting}
+            variant="outlined"
+            color="secondary"
+            style={{ margin: "10px" }}
+          >
+            Start Predicting
+          </Button>
+          <Button
+            type="button"
+            id="stopPredicting"
+            onClick={stopPredicting}
+            variant="outlined"
+            color="secondary"
+            style={{ margin: "10px" }}
+          >
+            Stop Predicting
+          </Button>
+          <Button
+            type="button"
+            id="saveModel"
+            onClick={saveModel}
+            variant="outlined"
+            color="secondary"
+            style={{ margin: "10px" }}
+          >
+            Download Model
+          </Button>
+          {isPredicting ? (
+            <Typography>Prediction: {finalPredictionText}</Typography>
+          ) : (
+            <Typography>Please click the "Start Predicting" button.</Typography>
+          )}
+        </div>
+      </Paper>
+      <Paper style={{ padding: "20px", margin: "20px 0px" }}>
+        <div style={{ textAlign: "center" }}>
+          <Typography variant="h5">Arena</Typography>
+        </div>
+        <Divider style={{ margin: "10px" }} />
 
-      <Grid container spacing={2}>
-        <Grid item xs={5}>
-          <Grid container justify="center">
-            <Grid item>
-              <Paper style={{ padding: "20px", margin: "20px" }}>
-                <Typography>Your Score: {playerScore}</Typography>
-              </Paper>
+        <Grid container spacing={2}>
+          <Grid item xs={5}>
+            <Grid container justify="center">
+              <Grid item>
+                <Paper style={{ padding: "20px", margin: "20px" }}>
+                  <Typography>Your Score: {playerScore}</Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={2}>
+            <Grid container justify="center">
+              <Grid item>
+                <Button
+                  onClick={takeImage}
+                  variant="contained"
+                  color="primary"
+                  style={{ margin: "10px" }}
+                >
+                  Fight!
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={5}>
+            <Grid container justify="center">
+              <Grid item>
+                <Paper style={{ padding: "20px", margin: "20px" }}>
+                  <Typography>CPU Score: {cpuScore}</Typography>
+                </Paper>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <Grid container justify="center">
-            <Grid item>
-              <Typography>FIGHT!</Typography>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={5}>
-          <Grid container justify="center">
-            <Grid item>
-              <Paper style={{ padding: "20px", margin: "20px" }}>
-                <Typography>CPU Score: {cpuScore}</Typography>
-              </Paper>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
-    </Paper>
+      </Paper>
+    </>
   );
 };
 
