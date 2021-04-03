@@ -170,7 +170,6 @@ const RockPaperScissor = () => {
   const [finalPredictionText, setFinalPredictionText] = useState("");
 
   const predict = async () => {
-    console.log("Bruh");
     while (isPredicting) {
       const predictedClass = tf.tidy(() => {
         const img = capture();
@@ -206,27 +205,93 @@ const RockPaperScissor = () => {
     }
   };
 
-  const doTraining = () => {
-    train();
-    alert("Training Done!");
-  };
-
   useEffect(() => {
     predict();
   }, [isPredicting]);
 
   const startPredicting = () => {
     setIsPredicting(true);
-    // predict();
   };
 
   const stopPredicting = () => {
     setIsPredicting(false);
-    // predict();
   };
 
   const saveModel = () => {
     model.save("downloads://my_model");
+  };
+
+  const [playerScore, setPlayerScore] = useState(0);
+  const [cpuScore, setCpuScore] = useState(0);
+
+  const takeImage = async () => {
+    const predictedClass = tf.tidy(() => {
+      const img = capture();
+      const activation = mobileNet.predict(img);
+      const predictions = model.predict(activation);
+      return predictions.as1D().argMax();
+    });
+
+    const classId = (await predictedClass.data())[0];
+    let predictionText = "";
+
+    switch (classId) {
+      case 0:
+        predictionText = "Rock";
+        break;
+      case 1:
+        predictionText = "Paper";
+        break;
+      case 2:
+        predictionText = "Scissors";
+        break;
+      case 3:
+        predictionText = "Spock";
+        break;
+      case 4:
+        predictionText = "Lizard";
+        break;
+    }
+
+    let cpuLabels = ["Rock", "Paper", "Scissors", "Spock", "Lizard"];
+    let cpuSelectedLabel = cpuLabels[Math.floor(Math.random() * 3)];
+
+    console.log(predictionText, cpuSelectedLabel);
+
+    if (predictionText === "Rock") {
+      if (cpuSelectedLabel === "Rock") {
+        console.log("Tie");
+      } else if (cpuSelectedLabel === "Paper") {
+        console.log("Lost");
+        setCpuScore(cpuScore + 1);
+      } else if (cpuSelectedLabel === "Scissors") {
+        console.log("Won");
+        setPlayerScore(playerScore + 1);
+      }
+    } else if ((predictionText = "Paper")) {
+      if (cpuSelectedLabel === "Rock") {
+        console.log("Won");
+        setPlayerScore(playerScore + 1);
+      } else if (cpuSelectedLabel === "Paper") {
+        console.log("Tie");
+      } else if (cpuSelectedLabel === "Scissors") {
+        console.log("Lost");
+        setCpuScore(cpuScore + 1);
+      }
+    } else if ((predictionText = "Scissors")) {
+      if (cpuSelectedLabel === "Rock") {
+        console.log("Lost");
+        setCpuScore(cpuScore + 1);
+      } else if (cpuSelectedLabel === "Paper") {
+        console.log("Won");
+        setPlayerScore(playerScore + 1);
+      } else if (cpuSelectedLabel === "Scissors") {
+        console.log("Tie");
+      }
+    }
+
+    predictedClass.dispose();
+    await tf.nextFrame();
   };
 
   return (
@@ -277,8 +342,14 @@ const RockPaperScissor = () => {
       {isPredicting ? (
         <Typography>Prediction: {finalPredictionText}</Typography>
       ) : (
-        <Typography>Please click the start prediction button.</Typography>
+        <Typography>Please click the "Start Predicting" button.</Typography>
       )}
+      <Divider />
+      <Typography>Arena</Typography>
+      <Typography>Your Score: {playerScore}</Typography>
+      <Typography>CPU Score: {cpuScore}</Typography>
+
+      <Button onClick={takeImage}>Take Image</Button>
     </Paper>
   );
 };
