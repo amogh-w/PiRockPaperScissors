@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Container, CssBaseline } from "@material-ui/core";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import { Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-mui";
 import orange from "@material-ui/core/colors/orange";
 import lightBlue from "@material-ui/core/colors/lightBlue";
 import deepPurple from "@material-ui/core/colors/deepPurple";
 import deepOrange from "@material-ui/core/colors/deepOrange";
+import Navbar from "./components/Navbar";
 import RockPaperScissor from "./components/RockPaperScissor";
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
     <ThemeProvider theme={darkTheme}>
       <AlertProvider template={AlertTemplate}>
         <CssBaseline />
+        <Navbar darkState={darkState} handleThemeChange={handleThemeChange} />
         <Container>
           <RockPaperScissor />
         </Container>

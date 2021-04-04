@@ -90,6 +90,8 @@ const RockPaperScissor = () => {
       case "4":
         setLizardSamples(lizardSamples + 1);
         break;
+      default:
+        break;
     }
 
     let label = parseInt(event.currentTarget.id);
@@ -111,14 +113,16 @@ const RockPaperScissor = () => {
   };
 
   const encodeLabels = (numClasses) => {
-    for (var i = 0; i < labels.length; i++) {
+    for (var i = 0; i < labels.length; i = i + 1) {
       if (ys == null) {
         ys = tf.keep(
+          // eslint-disable-next-line
           tf.tidy(() => {
             return tf.oneHot(tf.tensor1d([labels[i]]).toInt(), numClasses);
           })
         );
       } else {
+        // eslint-disable-next-line
         const y = tf.tidy(() => {
           return tf.oneHot(tf.tensor1d([labels[i]]).toInt(), numClasses);
         });
@@ -173,6 +177,7 @@ const RockPaperScissor = () => {
 
   const predict = async () => {
     while (isPredicting) {
+      // eslint-disable-next-line
       const predictedClass = tf.tidy(() => {
         const img = capture();
         const activation = mobileNet.predict(img);
@@ -199,6 +204,8 @@ const RockPaperScissor = () => {
         case 4:
           predictionText = "I see Lizard";
           break;
+        default:
+          break;
       }
 
       setFinalPredictionText(predictionText);
@@ -209,6 +216,7 @@ const RockPaperScissor = () => {
 
   useEffect(() => {
     predict();
+    // eslint-disable-next-line
   }, [isPredicting]);
 
   const startPredicting = () => {
@@ -252,6 +260,8 @@ const RockPaperScissor = () => {
         break;
       case 4:
         predictionText = "Lizard";
+        break;
+      default:
         break;
     }
 
@@ -304,9 +314,7 @@ const RockPaperScissor = () => {
     <>
       <Paper style={{ padding: "20px", margin: "20px 0px" }}>
         <div style={{ textAlign: "center" }}>
-          <Typography variant="h4">
-            Welcome to Rock Paper Scissors Game!
-          </Typography>
+          <Typography variant="h4">Training</Typography>
           <Divider style={{ margin: "10px" }} />
           <video ref={videoRef} />
           <br />
@@ -316,7 +324,7 @@ const RockPaperScissor = () => {
             onClick={handleButton}
             variant="outlined"
             color="primary"
-            style={{ margin: "20px" }}
+            style={{ margin: "10px" }}
           >
             Rock
           </Button>
@@ -441,7 +449,7 @@ const RockPaperScissor = () => {
                   onClick={takeImage}
                   variant="contained"
                   color="primary"
-                  style={{ margin: "10px" }}
+                  style={{ padding: "20px", margin: "25px 10px" }}
                 >
                   Fight!
                 </Button>
