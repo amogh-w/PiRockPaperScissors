@@ -280,7 +280,7 @@ const RockPaperScissor = () => {
         roundStatus = "Won";
         setPlayerScore(playerScore + 1);
       }
-    } else if ((predictionText = "Paper")) {
+    } else if (predictionText === "Paper") {
       if (cpuSelectedLabel === "Rock") {
         roundStatus = "Won";
         setPlayerScore(playerScore + 1);
@@ -290,7 +290,7 @@ const RockPaperScissor = () => {
         roundStatus = "Lost";
         setCpuScore(cpuScore + 1);
       }
-    } else if ((predictionText = "Scissors")) {
+    } else if (predictionText === "Scissors") {
       if (cpuSelectedLabel === "Rock") {
         roundStatus = "Lost";
         setCpuScore(cpuScore + 1);
